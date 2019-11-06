@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-latency
+  namespace: shubham
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: log-latency
+  template:
+    metadata:
+      labels:
+        role: log-latency
+      annotations:
+        # Just add these annotations to configure Prometheus.
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/metrics"
+        prometheus.io/port:  "8080"
+    spec:
+      containers:
+        - name: log-latency
+          image: gcr.io/wipro-gcp-parsnet-poc/employee-log-latency:v3
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          
